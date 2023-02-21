@@ -1,6 +1,8 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
 const app = express();
+const { db, genid } = require("./db/Dbutil")
 const prot = 8080
 
 //安装依赖
@@ -25,10 +27,36 @@ const update =multer({
   dest:"./public/upload/temp"
 })
 app.use(update.any());
+app.use(express.static(path.join(__dirname,"public")));
+
+//token验证中间件 
+//category/_token/add
+const ADMIN_TOKEN_PATH="/_token"
+app.all("*",async (req,res,next)=>{
+  if (req.path.indexOf(ADMIN_TOKEN_PATH)> -1 ){
+    let {token} =req.headers
+    let admin_token_sql = "SELECT * FROM `admin` WHERE `token` = ?"
+    let adminResult = await db.async.all(admin_token_sql,[token])
+    if (adminResult.err != null ||adminResult.rows.length == 0 ){
+        res.send({
+          code:403,
+          msg:"请先登录",
+          err:adminResult.err
+        
+        })
+        return
+    }else{
+      next()
+    }
+  }else{
+    next()
+  }
+})
 // ----------------------------------------------------------------
 app.use("/test",require("./routers/TestRouter"));
 app.use("/admin",require("./routers/AdminRouter"));
 app.use("/category",require("./routers/CategoryRouter"));
+app.use("/upload",require("./routers/UploadRouter"));
 app.get("/",(req,res)=>{
   res.send('hello world');
 })
