@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {db,genid} = require('../db/Dbutil')
+const {db,genid} = require('../db/DbUtils')
 
 
 

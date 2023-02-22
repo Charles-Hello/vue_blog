@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const fs = require('fs')
-const {db,genid} = require('../db/Dbutil')
+const {db,genid} = require('../db/DbUtils')
 
 
 router.post('/rich_editor_upload',async (req,res)=>{
