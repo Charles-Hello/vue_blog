@@ -5,8 +5,7 @@
       <div>
         <n-popselect @update:value="searchByCategory"
                      v-model:value="selectedCategory"
-                     :options="categortyOptions"
-                     trigger="click">
+                     multiple :options="categortyOptions">
           <div>分类<span>{{ categoryName }}</span></div>
         </n-popselect>
       </div>

@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-
+import './style.css'
 import './assets/main.css'
 import naive from 'naive-ui'
 import { createDiscreteApi } from 'naive-ui'
@@ -28,12 +28,12 @@ app.provide("axios",axios)
 app.provide("message", message)
 app.provide("notification", notification)
 app.provide("dialog", dialog)
-
+app.provide("server_url", axios.defaults.baseURL )
 
 app.use(naive)
 app.use(router)
 app.use(createPinia())
-app.mount('#app')
+
 const adminStore = AdminStore()
 // axios拦截器
 axios.interceptors.request.use((config)=>{
@@ -41,3 +41,6 @@ axios.interceptors.request.use((config)=>{
   config.headers.token = adminStore.token
   return config
 })
+
+
+app.mount('#app')
